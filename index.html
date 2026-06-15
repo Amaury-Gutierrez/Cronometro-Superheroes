@@ -8,7 +8,8 @@
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: linear-gradient(#dff4ff, #fff2b3);
+      /* Fondo azul y rojo estilo cómic */
+      background: linear-gradient(#4A90E2, #ff8a8a);
       height: 100vh;
       display: flex;
       justify-content: center;
@@ -16,13 +17,14 @@
       position: relative;
       overflow: hidden;
     }
-    .fondo-granja {
+    
+    .fondo-ciudad {
       position: fixed;
       left: 0;
       bottom: 0;
       width: 100%;
       height: 70vh;
-
+      /* Se mantiene tu imagen actual hasta que la cambies */
       background-image: url("images/granja.png");
       background-repeat: no-repeat;
       background-position: bottom center;
@@ -83,34 +85,22 @@
       left: 50%;
       transform: translateX(-50%);
       z-index: 1;
-      animation: flotar-nube-pollito 4.5s ease-in-out infinite alternate;
+      animation: flotar-nube-superheroe 4.5s ease-in-out infinite alternate;
     }
 
     @keyframes flotar-nube-1 {
-      from {
-        transform: translateY(0);
-      }
-      to {
-        transform: translateY(10px);
-      }
+      from { transform: translateY(0); }
+      to { transform: translateY(10px); }
     }
 
     @keyframes flotar-nube-2 {
-      from {
-        transform: translateY(0) translateX(0);
-      }
-      to {
-        transform: translateY(-8px) translateX(-10px);
-      }
+      from { transform: translateY(0) translateX(0); }
+      to { transform: translateY(-8px) translateX(-10px); }
     }
 
-    @keyframes flotar-nube-pollito {
-      from {
-        transform: translateX(-50%) translateY(0) rotate(-1deg);
-      }
-      to {
-        transform: translateX(-50%) translateY(12px) rotate(1deg);
-      }
+    @keyframes flotar-nube-superheroe {
+      from { transform: translateX(-50%) translateY(0) rotate(-1deg); }
+      to { transform: translateX(-50%) translateY(12px) rotate(1deg); }
     }
 
     @keyframes brillo-sol {
@@ -124,7 +114,7 @@
       }
     }
 
-    #pasto-pollitos {
+    #zona-superheroes {
       position: fixed;
       left: 0;
       bottom: 0;
@@ -134,7 +124,8 @@
       overflow: hidden;
       pointer-events: none;
     }
-    .pollito-suelto {
+    
+    .superheroe-suelto {
       position: absolute;
       font-size: 75px;
       cursor: grab;
@@ -143,7 +134,8 @@
       pointer-events: auto;
       transition: transform 0.15s;
     }
-    .pollito-suelto:active {
+    
+    .superheroe-suelto:active {
       cursor: grabbing;
       transform: scale(1.15);
     }
@@ -154,9 +146,10 @@
       left: 50%;
       transform: translateX(-50%);
 
-      background-color: #fff1a8;
-      color: #9a6500;
-      border: 3px solid #f4b400;
+      /* Colores estilo insignia */
+      background-color: #FFD700; 
+      color: #D32F2F;
+      border: 3px solid #D32F2F;
       border-radius: 18px;
 
       padding: 8px 22px;
@@ -171,8 +164,8 @@
     .contenedor {
       position: relative;
       z-index: 2;
-      background-color: rgba(255, 248, 220, 0.95);
-      border: 5px solid #f4b400;
+      background-color: rgba(255, 255, 255, 0.95);
+      border: 5px solid #1E88E5; /* Borde azul heroico */
       border-radius: 30px;
       padding: 45px 50px;
       text-align: center;
@@ -183,35 +176,34 @@
     }
 
     h1 {
-      color: #d18b00;
+      color: #D32F2F; /* Rojo vibrante */
       margin-bottom: 10px;
       font-size: 50px;
+      text-shadow: 3px 3px 0px #FFD700; /* Sombra amarilla estilo cómic */
     }
-    .pollito {
+    
+    .superheroe {
       font-size: 100px;
       margin: 10px 0;
       animation: saltito 1s infinite alternate;
     }
 
     @keyframes saltito {
-      from {
-        transform: translateY(0);
-      }
-      to {
-        transform: translateY(-10px);
-      }
+      from { transform: translateY(0); }
+      to { transform: translateY(-10px); }
     }
 
     #tiempo {
       font-size: 48px;
       font-weight: bold;
-      color: #7a4b00;
+      color: #1E88E5; /* Azul vibrante */
       margin: 25px 0;
-      background-color: #fff1a8;
+      background-color: #FFF9C4; /* Fondo amarillo claro */
       padding: 15px;
       border-radius: 20px;
-      border: 3px dashed #f4b400;
+      border: 3px dashed #D32F2F; /* Borde rojo */
     }
+    
     .botones button {
       font-size: 18px;
       padding: 12px 18px;
@@ -224,28 +216,23 @@
     }
 
     #play {
-      background-color: #8fd14f;
+      background-color: #1E88E5; /* Azul */
       color: white;
     }
 
     #detener {
-      background-color: #ff5757;
+      background-color: #D32F2F; /* Rojo */
       color: white;
     }
 
     #reiniciar {
-      background-color: #ff914d;
-      color: white;
+      background-color: #FFD700; /* Amarillo/Dorado */
+      color: #b71c1c; /* Texto oscuro para contrastar */
     }
 
     button:hover {
       transform: scale(1.08);
       opacity: 0.9;
-    }
-    .mensaje {
-      color: #9a6500;
-      font-size: 16px;
-      margin-top: 15px;
     }
   </style>
 </head>
@@ -253,23 +240,21 @@
 <body>
   <div class="decoracion-cielo">
     <img src="images/sol.png" class="sol-img" alt="Sol">
-
     <img src="images/nube1.png" class="nube-img nube-1" alt="Nube">
     <img src="images/nube2.png" class="nube-img nube-2" alt="Nube">
-    <img src="images/nube3.png" class="nube-img nube-3" alt="Nube pollito">
+    <img src="images/nube3.png" class="nube-img nube-3" alt="Nube superhéroe">
   </div>
 
-  <div class="fondo-granja"></div>
+  <div class="fondo-ciudad"></div>
 
-  <div id="pasto-pollitos"></div>
+  <div id="zona-superheroes"></div>
 
   <div class="contenedor">
-
     <div class="nombre-autor"> 🦸🏼‍♀️ Cesia Josselyn Flores Juárez 🦸🏼‍♀️</div>
 
     <h1>Cronómetro Superhéroes</h1>
 
-    <div class="pollito">🦸🏼‍♀️</div>
+    <div class="superheroe">🦸🏼‍♀️</div>
 
     <div id="tiempo">00:00.00</div>
 
@@ -278,7 +263,6 @@
       <button id="detener">⏸️ Detener</button>
       <button id="reiniciar">🔄 Reiniciar</button>
     </div>
-
   </div>
 
 <script>
@@ -293,27 +277,26 @@
   const boton_detener = document.getElementById("detener");
   const boton_reiniciar = document.getElementById("reiniciar");
 
+  const zona_superheroes = document.getElementById("zona-superheroes");
 
-  const pasto_pollitos = document.getElementById("pasto-pollitos");
+  const tiempo_entre_superheroes = 1 * 60 * 1000;
+  const velocidad_superheroe = 1.5;
 
-  const tiempo_entre_pollitos = 1 * 60 * 1000;
-  const velocidad_pollito = 1.5;
+  // Mantenemos la ruta de tu audio actual hasta que la cambies
+  const sonido_superheroe = new Audio("audio/sonido_pollito.mp3");
+  sonido_superheroe.volume = 1;
+  sonido_superheroe.preload = "auto";
 
-  const sonido_pollito = new Audio("audio/sonido_pollito.mp3");
-  sonido_pollito.volume = 1;
-  sonido_pollito.preload = "auto";
-
-  let pollitos = [];
-  let intervalo_pollitos = null;
-  let animacion_pollitos = null;
-  let pollitos_activos = false;
-  let siguiente_pollito_ms = tiempo_entre_pollitos;
-
+  let superheroes = [];
+  let intervalo_superheroes = null;
+  let animacion_superheroes = null;
+  let superheroes_activos = false;
+  let siguiente_superheroe_ms = tiempo_entre_superheroes;
 
   function mostrar_tiempo(ms) {
     let minutos = Math.floor(ms / 60000);
     let segundos = Math.floor((ms % 60000) / 1000);
-    let milesimas = Math.floor((ms % 1000) /10);
+    let milesimas = Math.floor((ms % 1000) / 10);
 
     let minutos_texto = String(minutos).padStart(2, "0");
     let segundos_texto = String(segundos).padStart(2, "0");
@@ -322,15 +305,15 @@
     tiempo.textContent = minutos_texto + ":" + segundos_texto + "." + milesimas_texto;
   }
 
-  function generar_pollitos_por_tiempo(transcurrido) {
-  while (
-    siguiente_pollito_ms <= limite &&
-    transcurrido >= siguiente_pollito_ms
-  ) {
-    crear_pollito();
-    siguiente_pollito_ms += tiempo_entre_pollitos;
+  function generar_superheroes_por_tiempo(transcurrido) {
+    while (
+      siguiente_superheroe_ms <= limite &&
+      transcurrido >= siguiente_superheroe_ms
+    ) {
+      crear_superheroe();
+      siguiente_superheroe_ms += tiempo_entre_superheroes;
+    }
   }
-}
 
   function actualizar_cronometro() {
     let ahora = performance.now();
@@ -339,40 +322,35 @@
     if (transcurrido >= limite) {
       transcurrido = limite;
 
-      generar_pollitos_por_tiempo(transcurrido);
+      generar_superheroes_por_tiempo(transcurrido);
       mostrar_tiempo(transcurrido);
 
       clearInterval(intervalo);
       intervalo = null;
       tiempo_acumulado = limite;
 
-      detener_pollitos();
-
+      detener_superheroes();
       return;
     }
 
-    generar_pollitos_por_tiempo(transcurrido);
+    generar_superheroes_por_tiempo(transcurrido);
     mostrar_tiempo(transcurrido);
   }
 
   function iniciar_cronometro() {
     if (intervalo === null && tiempo_acumulado < limite) {
       tiempo_inicio = performance.now();
-
       intervalo = setInterval(actualizar_cronometro, 10);
-
-      iniciar_pollitos();
+      iniciar_superheroes();
     }
   }
 
   function detener_cronometro() {
     if (intervalo !== null) {
       tiempo_acumulado += performance.now() - tiempo_inicio;
-
       clearInterval(intervalo);
       intervalo = null;
-
-      detener_pollitos();
+      detener_superheroes();
     }
   }
 
@@ -383,119 +361,106 @@
     tiempo_inicio = null;
 
     mostrar_tiempo(0);
-
-    reiniciar_pollitos();
+    reiniciar_superheroes();
   }
 
-
-
-  function reproducir_sonido_pollito() {
-    const sonido = sonido_pollito.cloneNode();
-    sonido.volume = sonido_pollito.volume;
-
-    sonido.play().catch(() => {
-    });
+  function reproducir_sonido_superheroe() {
+    const sonido = sonido_superheroe.cloneNode();
+    sonido.volume = sonido_superheroe.volume;
+    sonido.play().catch(() => {});
   }
 
+  function crear_superheroe() {
+    const superheroe = document.createElement("div");
+    superheroe.classList.add("superheroe-suelto");
+    superheroe.textContent = "🦸🏼‍♀️";
 
+    zona_superheroes.appendChild(superheroe);
+    reproducir_sonido_superheroe();  
 
-  function crear_pollito() {
-    const pollito = document.createElement("div");
-    pollito.classList.add("pollito-suelto");
-    pollito.textContent = "🦸🏼‍♀️";
-
-    pasto_pollitos.appendChild(pollito);
-    reproducir_sonido_pollito();  
-
-    const size = pollito.offsetWidth || 42;
-    const ancho = pasto_pollitos.clientWidth;
-    const alto = pasto_pollitos.clientHeight;
+    const size = superheroe.offsetWidth || 42;
+    const ancho = zona_superheroes.clientWidth;
+    const alto = zona_superheroes.clientHeight;
 
     const x = Math.random() * (ancho - size);
     const y = Math.random() * (alto - size);
 
     const datos = {
-      elemento: pollito,
+      elemento: superheroe,
       x,
       y,
-      dx: (Math.random() - 0.5) * velocidad_pollito * 2,
-      dy: (Math.random() - 0.5) * velocidad_pollito * 2,
+      dx: (Math.random() - 0.5) * velocidad_superheroe * 2,
+      dy: (Math.random() - 0.5) * velocidad_superheroe * 2,
       arrastrando: false
     };
 
-    actualizar_posicion_pollito(datos);
-    activar_arrastre_pollito(datos);
+    actualizar_posicion_superheroe(datos);
+    activar_arrastre_superheroe(datos);
 
-    pollitos.push(datos);
+    superheroes.push(datos);
   }
 
-  function activar_arrastre_pollito(datos) {
-    const pollito = datos.elemento;
-
+  function activar_arrastre_superheroe(datos) {
+    const superheroe = datos.elemento;
     let offsetX = 0;
     let offsetY = 0;
 
-    pollito.addEventListener("pointerdown", (e) => {
+    superheroe.addEventListener("pointerdown", (e) => {
       datos.arrastrando = true;
-
-      const rect = pollito.getBoundingClientRect();
-
+      const rect = superheroe.getBoundingClientRect();
       offsetX = e.clientX - rect.left;
       offsetY = e.clientY - rect.top;
-
-      pollito.setPointerCapture(e.pointerId);
+      superheroe.setPointerCapture(e.pointerId);
     });
 
-    pollito.addEventListener("pointermove", (e) => {
+    superheroe.addEventListener("pointermove", (e) => {
       if (!datos.arrastrando) return;
 
-      const rect_pasto = pasto_pollitos.getBoundingClientRect();
+      const rect_zona = zona_superheroes.getBoundingClientRect();
+      datos.x = e.clientX - rect_zona.left - offsetX;
+      datos.y = e.clientY - rect_zona.top - offsetY;
 
-      datos.x = e.clientX - rect_pasto.left - offsetX;
-      datos.y = e.clientY - rect_pasto.top - offsetY;
-
-      limitar_pollito_al_pasto(datos);
-      actualizar_posicion_pollito(datos);
+      limitar_superheroe_a_zona(datos);
+      actualizar_posicion_superheroe(datos);
     });
 
-    pollito.addEventListener("pointerup", () => {
+    superheroe.addEventListener("pointerup", () => {
       datos.arrastrando = false;
-
-      datos.dx = (Math.random() - 0.5) * velocidad_pollito * 2;
-      datos.dy = (Math.random() - 0.5) * velocidad_pollito * 2;
+      datos.dx = (Math.random() - 0.5) * velocidad_superheroe * 2;
+      datos.dy = (Math.random() - 0.5) * velocidad_superheroe * 2;
     });
 
-    pollito.addEventListener("pointercancel", () => {
+    superheroe.addEventListener("pointercancel", () => {
       datos.arrastrando = false;
     });
   }
 
-  function limitar_pollito_al_pasto(datos) {
+  function limitar_superheroe_a_zona(datos) {
     const size = datos.elemento.offsetWidth || 42;
-    const ancho = pasto_pollitos.clientWidth;
-    const alto = pasto_pollitos.clientHeight;
+    const ancho = zona_superheroes.clientWidth;
+    const alto = zona_superheroes.clientHeight;
 
     datos.x = Math.max(0, Math.min(ancho - size, datos.x));
     datos.y = Math.max(0, Math.min(alto - size, datos.y));
   }
 
-  function actualizar_posicion_pollito(datos) {
+  function actualizar_posicion_superheroe(datos) {
     datos.elemento.style.left = datos.x + "px";
     datos.elemento.style.top = datos.y + "px";
   }
 
-  function mover_pollitos() {
-    if (!pollitos_activos) return;
+  function mover_superheroes() {
+    if (!superheroes_activos) return;
 
-    pollitos.forEach(datos => {
+    superheroes.forEach(datos => {
       if (datos.arrastrando) return;
 
       datos.x += datos.dx;
       datos.y += datos.dy;
 
       const size = datos.elemento.offsetWidth || 42;
-      const ancho = pasto_pollitos.clientWidth;
-      const alto = pasto_pollitos.clientHeight;
+      const ancho = zona_superheroes.clientWidth;
+      const alto = zona_superheroes.clientHeight;
 
       if (datos.x <= 0 || datos.x >= ancho - size) {
         datos.dx *= -1;
@@ -506,43 +471,39 @@
       }
 
       if (Math.random() < 0.02) {
-        datos.dx = (Math.random() - 0.5) * velocidad_pollito * 2;
-        datos.dy = (Math.random() - 0.5) * velocidad_pollito * 2;
+        datos.dx = (Math.random() - 0.5) * velocidad_superheroe * 2;
+        datos.dy = (Math.random() - 0.5) * velocidad_superheroe * 2;
       }
 
-      limitar_pollito_al_pasto(datos);
-      actualizar_posicion_pollito(datos);
+      limitar_superheroe_a_zona(datos);
+      actualizar_posicion_superheroe(datos);
     });
 
-    animacion_pollitos = requestAnimationFrame(mover_pollitos);
+    animacion_superheroes = requestAnimationFrame(mover_superheroes);
   }
 
-  function iniciar_pollitos() {
-    if (pollitos_activos) return;
-
-    pollitos_activos = true;
-    mover_pollitos();
+  function iniciar_superheroes() {
+    if (superheroes_activos) return;
+    superheroes_activos = true;
+    mover_superheroes();
   }
 
-  function detener_pollitos() {
-    pollitos_activos = false;
-
-    cancelAnimationFrame(animacion_pollitos);
-    animacion_pollitos = null;
+  function detener_superheroes() {
+    superheroes_activos = false;
+    cancelAnimationFrame(animacion_superheroes);
+    animacion_superheroes = null;
   }
 
-  function reiniciar_pollitos() {
-    detener_pollitos();
+  function reiniciar_superheroes() {
+    detener_superheroes();
 
-    pollitos.forEach(datos => {
+    superheroes.forEach(datos => {
       datos.elemento.remove();
     });
 
-    pollitos = [];
-    siguiente_pollito_ms = tiempo_entre_pollitos;
+    superheroes = [];
+    siguiente_superheroe_ms = tiempo_entre_superheroes;
   }
-
-
 
   boton_play.addEventListener("click", iniciar_cronometro);
   boton_detener.addEventListener("click", detener_cronometro);
