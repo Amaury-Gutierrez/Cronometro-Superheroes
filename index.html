@@ -39,7 +39,7 @@
       left: 0;
       bottom: 0;
       width: 100%;
-      height: 200vh;
+      height: 150vh;
       background-image: url("images/ciudad.png");
       background-repeat: no-repeat;
       background-position: bottom center;
@@ -49,20 +49,20 @@
       pointer-events: none;
     }
 
-    #zona-superheroes {
+    #zona-personajes {
       position: fixed;
       left: 0;
       bottom: 0;
       width: 100%;
-      height: 100vh; /* Ocupa toda la pantalla para que puedan rebotar por todos lados */
-      z-index: 1;
+      height: 100vh; 
+      z-index: 1; 
       overflow: hidden;
       pointer-events: none;
     }
     
-    .superheroe-suelto {
+    .personaje-suelto {
       position: absolute;
-      width: 400px; /* Tamaño adaptado para las imágenes PNG */
+      width: 300px; 
       height: auto;
       cursor: grab;
       user-select: none;
@@ -72,7 +72,7 @@
       filter: drop-shadow(0 6px 8px rgba(0, 0, 0, 0.3)); 
     }
     
-    .superheroe-suelto:active {
+    .personaje-suelto:active {
       cursor: grabbing;
       transform: scale(1.15);
     }
@@ -83,7 +83,6 @@
       left: 50%;
       transform: translateX(-50%);
 
-      /* Colores estilo insignia */
       background-color: #FFD700; 
       color: #D32F2F;
       border: 3px solid #D32F2F;
@@ -100,9 +99,9 @@
 
     .contenedor {
       position: relative;
-      z-index: 2; /* Por encima de los superhéroes rebotando */
+      z-index: 2; 
       background-color: rgba(255, 255, 255, 0.95);
-      border: 5px solid #1E88E5; /* Borde azul heroico */
+      border: 5px solid #1E88E5; 
       border-radius: 30px;
       padding: 45px 50px;
       text-align: center;
@@ -113,13 +112,13 @@
     }
 
     h1 {
-      color: #D32F2F; /* Rojo vibrante */
+      color: #D32F2F; 
       margin-bottom: 10px;
       font-size: 50px;
-      text-shadow: 3px 3px 0px #FFD700; /* Sombra amarilla estilo cómic */
+      text-shadow: 3px 3px 0px #FFD700; 
     }
     
-    .superheroe {
+    .icono-principal {
       font-size: 100px;
       margin: 10px 0;
       animation: saltito 1s infinite alternate;
@@ -133,12 +132,12 @@
     #tiempo {
       font-size: 48px;
       font-weight: bold;
-      color: #1E88E5; /* Azul vibrante */
+      color: #1E88E5; 
       margin: 25px 0;
-      background-color: #FFF9C4; /* Fondo amarillo claro */
+      background-color: #FFF9C4; 
       padding: 15px;
       border-radius: 20px;
-      border: 3px dashed #D32F2F; /* Borde rojo */
+      border: 3px dashed #D32F2F; 
     }
     
     .botones button {
@@ -153,18 +152,18 @@
     }
 
     #play {
-      background-color: #1E88E5; /* Azul */
+      background-color: #1E88E5; 
       color: white;
     }
 
     #detener {
-      background-color: #D32F2F; /* Rojo */
+      background-color: #D32F2F; 
       color: white;
     }
 
     #reiniciar {
-      background-color: #FFD700; /* Amarillo/Dorado */
-      color: #b71c1c; /* Texto oscuro para contrastar */
+      background-color: #FFD700; 
+      color: #b71c1c; 
     }
 
     button:hover {
@@ -177,14 +176,14 @@
 <body>
   <div class="fondo-ciudad"></div>
 
-  <div id="zona-superheroes"></div>
+  <div id="zona-personajes"></div>
 
   <div class="contenedor">
     <div class="nombre-autor"> 🦸🏼‍♀️ Cesia Josselyn Flores Juárez 🦸🏼‍♀️</div>
 
     <h1>Cronómetro Superhéroes</h1>
 
-    <div class="superheroe">🦸🏼‍♀️</div>
+    <div class="icono-principal">⚔️</div>
 
     <div id="tiempo">00:00.00</div>
 
@@ -207,17 +206,35 @@
   const boton_detener = document.getElementById("detener");
   const boton_reiniciar = document.getElementById("reiniciar");
 
-  const zona_superheroes = document.getElementById("zona-superheroes");
+  const zona_personajes = document.getElementById("zona-personajes");
 
-  const tiempo_entre_superheroes = 1 * 60 * 1000; // 1 minuto exacto
-  const velocidad_superheroe = 1.5;
+  const tiempo_entre_personajes = 1 * 60 * 1000; // 1 minuto exacto
+  const velocidad_personajes = 1.5;
 
-  let superheroes = [];
-  let animacion_superheroes = null;
-  let superheroes_activos = false;
+  let personajes_activos = [];
+  let animacion_personajes = null;
+  let animacion_activa = false;
   
-  // Empezamos en 0 para que el primer superhéroe salga inmediatamente al dar 'Play'
-  let siguiente_superheroe_ms = 0; 
+  let siguiente_personaje_ms = 0; 
+
+  // Listas de personajes según la imagen proporcionada
+  const lista_heroes = [
+    "images/batman.png",
+    "images/black_widow.png",
+    "images/capitan.png",
+    "images/hulk.png",
+    "images/ironman.png",
+    "images/spiderman.png",
+    "images/superman.png",
+    "images/thor.png"
+  ];
+
+  const lista_villanos = [
+    "images/thanos.png",
+    "images/duende_verde.png",
+    "images/red_skull.png",
+    "images/loki.png"
+  ];
 
   function mostrar_tiempo(ms) {
     let minutos = Math.floor(ms / 60000);
@@ -231,14 +248,13 @@
     tiempo.textContent = minutos_texto + ":" + segundos_texto + "." + milesimas_texto;
   }
 
-  function generar_superheroes_por_tiempo(transcurrido) {
+  function generar_personajes_por_tiempo(transcurrido) {
     while (
-      siguiente_superheroe_ms <= limite &&
-      transcurrido >= siguiente_superheroe_ms
+      siguiente_personaje_ms <= limite &&
+      transcurrido >= siguiente_personaje_ms
     ) {
-      let minuto_actual = Math.floor(siguiente_superheroe_ms / 60000);
-      crear_superheroe(minuto_actual);
-      siguiente_superheroe_ms += tiempo_entre_superheroes;
+      crear_enfrentamiento();
+      siguiente_personaje_ms += tiempo_entre_personajes;
     }
   }
 
@@ -249,18 +265,18 @@
     if (transcurrido >= limite) {
       transcurrido = limite;
 
-      generar_superheroes_por_tiempo(transcurrido);
+      generar_personajes_por_tiempo(transcurrido);
       mostrar_tiempo(transcurrido);
 
       clearInterval(intervalo);
       intervalo = null;
       tiempo_acumulado = limite;
 
-      detener_superheroes();
+      detener_animacion();
       return;
     }
 
-    generar_superheroes_por_tiempo(transcurrido);
+    generar_personajes_por_tiempo(transcurrido);
     mostrar_tiempo(transcurrido);
   }
 
@@ -268,7 +284,7 @@
     if (intervalo === null && tiempo_acumulado < limite) {
       tiempo_inicio = performance.now();
       intervalo = setInterval(actualizar_cronometro, 10);
-      iniciar_superheroes();
+      iniciar_animacion();
     }
   }
 
@@ -277,7 +293,7 @@
       tiempo_acumulado += performance.now() - tiempo_inicio;
       clearInterval(intervalo);
       intervalo = null;
-      detener_superheroes();
+      detener_animacion();
     }
   }
 
@@ -288,118 +304,115 @@
     tiempo_inicio = null;
 
     mostrar_tiempo(0);
-    reiniciar_superheroes();
+    reiniciar_animacion();
   }
 
-  function crear_superheroe(minuto) {
-    // 1. ELIMINAR CUALQUIER SUPERHÉROE ANTERIOR PARA QUE NO SE ACUMULEN
-    zona_superheroes.innerHTML = "";
-    superheroes = [];
+  function crear_enfrentamiento() {
+    // 1. Limpiar la pantalla para que no se acumulen
+    zona_personajes.innerHTML = "";
+    personajes_activos = [];
 
-    // 2. CREAR EL NUEVO SUPERHÉROE
-    const superheroe_elem = document.createElement("img");
-    superheroe_elem.classList.add("superheroe-suelto");
-    superheroe_elem.draggable = false;
+    // 2. Seleccionar un héroe y un villano al azar
+    const heroe_random = lista_heroes[Math.floor(Math.random() * lista_heroes.length)];
+    const villano_random = lista_villanos[Math.floor(Math.random() * lista_villanos.length)];
 
-    // Arreglo con tus imágenes
-    const imagenes_superheroes = [
-      "images/batman.png",
-      "images/spiderman.png",
-      "images/hulk.png",
-      "images/capitan.png",
-      "images/superman.png"
-    ];
+    // 3. Agregarlos a la pantalla
+    agregar_personaje_a_pantalla(heroe_random);
+    agregar_personaje_a_pantalla(villano_random);
+  }
 
-    // Calcula cuál imagen toca dependiendo del minuto actual
-    const indice = minuto % imagenes_superheroes.length;
-    superheroe_elem.src = imagenes_superheroes[indice];
+  function agregar_personaje_a_pantalla(ruta_imagen) {
+    const img_elem = document.createElement("img");
+    img_elem.classList.add("personaje-suelto");
+    img_elem.draggable = false;
+    img_elem.src = ruta_imagen;
 
-    zona_superheroes.appendChild(superheroe_elem);
+    zona_personajes.appendChild(img_elem);
 
     const size = 150; 
-    const ancho = zona_superheroes.clientWidth;
-    const alto = zona_superheroes.clientHeight;
+    const ancho = zona_personajes.clientWidth;
+    const alto = zona_personajes.clientHeight;
 
-    // Aparece en una posición aleatoria
+    // Posición inicial aleatoria
     const x = Math.random() * (ancho - size);
     const y = Math.random() * (alto - size);
 
     const datos = {
-      elemento: superheroe_elem,
+      elemento: img_elem,
       x,
       y,
-      dx: (Math.random() - 0.5) * velocidad_superheroe * 2,
-      dy: (Math.random() - 0.5) * velocidad_superheroe * 2,
+      dx: (Math.random() - 0.5) * velocidad_personajes * 2,
+      dy: (Math.random() - 0.5) * velocidad_personajes * 2,
       arrastrando: false
     };
 
-    actualizar_posicion_superheroe(datos);
-    activar_arrastre_superheroe(datos);
+    actualizar_posicion_personaje(datos);
+    activar_arrastre_personaje(datos);
 
-    superheroes.push(datos);
+    personajes_activos.push(datos);
   }
 
-  function activar_arrastre_superheroe(datos) {
-    const superheroe_elem = datos.elemento;
+  function activar_arrastre_personaje(datos) {
+    const elem = datos.elemento;
     let offsetX = 0;
     let offsetY = 0;
 
-    superheroe_elem.addEventListener("pointerdown", (e) => {
+    elem.addEventListener("pointerdown", (e) => {
       datos.arrastrando = true;
-      const rect = superheroe_elem.getBoundingClientRect();
+      const rect = elem.getBoundingClientRect();
       offsetX = e.clientX - rect.left;
       offsetY = e.clientY - rect.top;
-      superheroe_elem.setPointerCapture(e.pointerId);
+      elem.setPointerCapture(e.pointerId);
     });
 
-    superheroe_elem.addEventListener("pointermove", (e) => {
+    elem.addEventListener("pointermove", (e) => {
       if (!datos.arrastrando) return;
 
-      const rect_zona = zona_superheroes.getBoundingClientRect();
+      const rect_zona = zona_personajes.getBoundingClientRect();
       datos.x = e.clientX - rect_zona.left - offsetX;
       datos.y = e.clientY - rect_zona.top - offsetY;
 
-      limitar_superheroe_a_zona(datos);
-      actualizar_posicion_superheroe(datos);
+      limitar_personaje_a_zona(datos);
+      actualizar_posicion_personaje(datos);
     });
 
-    superheroe_elem.addEventListener("pointerup", () => {
+    elem.addEventListener("pointerup", () => {
       datos.arrastrando = false;
-      datos.dx = (Math.random() - 0.5) * velocidad_superheroe * 2;
-      datos.dy = (Math.random() - 0.5) * velocidad_superheroe * 2;
+      datos.dx = (Math.random() - 0.5) * velocidad_personajes * 2;
+      datos.dy = (Math.random() - 0.5) * velocidad_personajes * 2;
     });
 
-    superheroe_elem.addEventListener("pointercancel", () => {
+    elem.addEventListener("pointercancel", () => {
       datos.arrastrando = false;
     });
   }
 
-  function limitar_superheroe_a_zona(datos) {
+  function limitar_personaje_a_zona(datos) {
     const size = datos.elemento.offsetWidth || 150;
-    const ancho = zona_superheroes.clientWidth;
-    const alto = zona_superheroes.clientHeight;
+    const ancho = zona_personajes.clientWidth;
+    const alto = zona_personajes.clientHeight;
 
     datos.x = Math.max(0, Math.min(ancho - size, datos.x));
     datos.y = Math.max(0, Math.min(alto - size, datos.y));
   }
 
-  function actualizar_posicion_superheroe(datos) {
+  function actualizar_posicion_personaje(datos) {
     datos.elemento.style.left = datos.x + "px";
     datos.elemento.style.top = datos.y + "px";
   }
 
-  function mover_superheroes() {
-    if (!superheroes_activos) return;
+  function mover_personajes() {
+    if (!animacion_activa) return;
 
-    superheroes.forEach(datos => {
+    personajes_activos.forEach(datos => {
       if (datos.arrastrando) return;
 
       datos.x += datos.dx;
       datos.y += datos.dy;
 
       const size = datos.elemento.offsetWidth || 150;
-      const ancho = zona_superheroes.clientWidth;
-      const alto = zona_superheroes.clientHeight;
+      const ancho = zona_personajes.clientWidth;
+      const alto = zona_personajes.clientHeight;
 
       if (datos.x <= 0 || datos.x >= ancho - size) {
         datos.dx *= -1;
@@ -410,36 +423,36 @@
       }
 
       if (Math.random() < 0.02) {
-        datos.dx = (Math.random() - 0.5) * velocidad_superheroe * 2;
-        datos.dy = (Math.random() - 0.5) * velocidad_superheroe * 2;
+        datos.dx = (Math.random() - 0.5) * velocidad_personajes * 2;
+        datos.dy = (Math.random() - 0.5) * velocidad_personajes * 2;
       }
 
-      limitar_superheroe_a_zona(datos);
-      actualizar_posicion_superheroe(datos);
+      limitar_personaje_a_zona(datos);
+      actualizar_posicion_personaje(datos);
     });
 
-    animacion_superheroes = requestAnimationFrame(mover_superheroes);
+    animacion_personajes = requestAnimationFrame(mover_personajes);
   }
 
-  function iniciar_superheroes() {
-    if (superheroes_activos) return;
-    superheroes_activos = true;
-    mover_superheroes();
+  function iniciar_animacion() {
+    if (animacion_activa) return;
+    animacion_activa = true;
+    mover_personajes();
   }
 
-  function detener_superheroes() {
-    superheroes_activos = false;
-    if (animacion_superheroes !== null) {
-      cancelAnimationFrame(animacion_superheroes);
-      animacion_superheroes = null;
+  function detener_animacion() {
+    animacion_activa = false;
+    if (animacion_personajes !== null) {
+      cancelAnimationFrame(animacion_personajes);
+      animacion_personajes = null;
     }
   }
 
-  function reiniciar_superheroes() {
-    detener_superheroes();
-    zona_superheroes.innerHTML = "";
-    superheroes = [];
-    siguiente_superheroe_ms = 0; // Se reinicia para que el primero vuelva a salir en el ms 0
+  function reiniciar_animacion() {
+    detener_animacion();
+    zona_personajes.innerHTML = "";
+    personajes_activos = [];
+    siguiente_personaje_ms = 0; 
   }
 
   boton_play.addEventListener("click", iniciar_cronometro);
