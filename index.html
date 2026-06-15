@@ -8,14 +8,30 @@
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      /* Fondo azul y rojo estilo cómic */
-      background: linear-gradient(#4A90E2, #ff8a8a);
       height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
       position: relative;
       overflow: hidden;
+      
+      /* Degradado dinámico continuo: Ciclo épico de Superhéroes */
+      background: linear-gradient(135deg, 
+        #87CEEB, /* Día: Azul cielo claro */
+        #fdbb2d, /* Atardecer brillante: Dorado heroico */
+        #d32f2f, /* Crepúsculo: Rojo intenso (estilo cómic) */
+        #0b1a30, /* Noche profunda: Azul marino casi negro */
+        #1a2a6c, /* Amanecer: Azul oscuro vibrante */
+        #87CEEB, /* Regreso al Día para el bucle */
+        #fdbb2d  /* Transición suave para reiniciar */
+      );
+      background-size: 600% 600%;
+      animation: degradado-heroico 40s linear infinite;
+    }
+
+    @keyframes degradado-heroico {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 100% 50%; }
     }
     
     .fondo-ciudad {
@@ -24,8 +40,7 @@
       bottom: 0;
       width: 100%;
       height: 70vh;
-      /* Se mantiene tu imagen actual hasta que la cambies */
-      background-image: url("images/granja.png");
+      background-image: url("images/ciudad.png");
       background-repeat: no-repeat;
       background-position: bottom center;
       background-size: 100% auto;
@@ -34,92 +49,12 @@
       pointer-events: none;
     }
 
-    .decoracion-cielo {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 55vh;
-      z-index: 0;
-      pointer-events: none;
-      overflow: hidden;
-    }
-
-    .decoracion-cielo img {
-      position: absolute;
-      object-fit: contain;
-      user-select: none;
-      pointer-events: none;
-    }
-
-    .sol-img {
-      width: clamp(90px, 10vw, 150px);
-      top: 4vh;
-      right: 25vw;
-      animation: brillo-sol 3s ease-in-out infinite alternate;
-    }
-
-    .nube-img {
-      opacity: 0.95;
-      filter: drop-shadow(0 6px 8px rgba(0, 0, 0, 0.08));
-    }
-
-    .nube-1 {
-      width: clamp(130px, 16vw, 240px);
-      top: 15vh;
-      left: 15vw;
-      animation: flotar-nube-1 5s ease-in-out infinite alternate;
-    }
-
-    .nube-2 {
-      width: clamp(110px, 13vw, 210px);
-      top: 24vh;
-      right: 15vw;
-      opacity: 0.85;
-      animation: flotar-nube-2 6s ease-in-out infinite alternate;
-    }
-
-    .nube-3 {
-      width: clamp(170px, 10vw, 300px);
-      top: 3vh;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 1;
-      animation: flotar-nube-superheroe 4.5s ease-in-out infinite alternate;
-    }
-
-    @keyframes flotar-nube-1 {
-      from { transform: translateY(0); }
-      to { transform: translateY(10px); }
-    }
-
-    @keyframes flotar-nube-2 {
-      from { transform: translateY(0) translateX(0); }
-      to { transform: translateY(-8px) translateX(-10px); }
-    }
-
-    @keyframes flotar-nube-superheroe {
-      from { transform: translateX(-50%) translateY(0) rotate(-1deg); }
-      to { transform: translateX(-50%) translateY(12px) rotate(1deg); }
-    }
-
-    @keyframes brillo-sol {
-      from {
-        transform: scale(1);
-        filter: drop-shadow(0 0 4px rgba(255, 196, 0, 0.4));
-      }
-      to {
-        transform: scale(1.05);
-        filter: drop-shadow(0 0 14px rgba(255, 196, 0, 0.65));
-      }
-    }
-
     #zona-superheroes {
       position: fixed;
       left: 0;
       bottom: 0;
       width: 100%;
-      height: 20vh;
+      height: 100vh; /* Ocupa toda la pantalla para que puedan rebotar por todos lados */
       z-index: 1;
       overflow: hidden;
       pointer-events: none;
@@ -127,12 +62,14 @@
     
     .superheroe-suelto {
       position: absolute;
-      font-size: 75px;
+      width: 400px; /* Tamaño adaptado para las imágenes PNG */
+      height: auto;
       cursor: grab;
       user-select: none;
       touch-action: none;
       pointer-events: auto;
       transition: transform 0.15s;
+      filter: drop-shadow(0 6px 8px rgba(0, 0, 0, 0.3)); 
     }
     
     .superheroe-suelto:active {
@@ -163,7 +100,7 @@
 
     .contenedor {
       position: relative;
-      z-index: 2;
+      z-index: 2; /* Por encima de los superhéroes rebotando */
       background-color: rgba(255, 255, 255, 0.95);
       border: 5px solid #1E88E5; /* Borde azul heroico */
       border-radius: 30px;
@@ -238,13 +175,6 @@
 </head>
 
 <body>
-  <div class="decoracion-cielo">
-    <img src="images/sol.png" class="sol-img" alt="Sol">
-    <img src="images/nube1.png" class="nube-img nube-1" alt="Nube">
-    <img src="images/nube2.png" class="nube-img nube-2" alt="Nube">
-    <img src="images/nube3.png" class="nube-img nube-3" alt="Nube superhéroe">
-  </div>
-
   <div class="fondo-ciudad"></div>
 
   <div id="zona-superheroes"></div>
@@ -279,19 +209,15 @@
 
   const zona_superheroes = document.getElementById("zona-superheroes");
 
-  const tiempo_entre_superheroes = 1 * 60 * 1000;
+  const tiempo_entre_superheroes = 1 * 60 * 1000; // 1 minuto exacto
   const velocidad_superheroe = 1.5;
 
-  // Mantenemos la ruta de tu audio actual hasta que la cambies
-  const sonido_superheroe = new Audio("audio/sonido_pollito.mp3");
-  sonido_superheroe.volume = 1;
-  sonido_superheroe.preload = "auto";
-
   let superheroes = [];
-  let intervalo_superheroes = null;
   let animacion_superheroes = null;
   let superheroes_activos = false;
-  let siguiente_superheroe_ms = tiempo_entre_superheroes;
+  
+  // Empezamos en 0 para que el primer superhéroe salga inmediatamente al dar 'Play'
+  let siguiente_superheroe_ms = 0; 
 
   function mostrar_tiempo(ms) {
     let minutos = Math.floor(ms / 60000);
@@ -310,7 +236,8 @@
       siguiente_superheroe_ms <= limite &&
       transcurrido >= siguiente_superheroe_ms
     ) {
-      crear_superheroe();
+      let minuto_actual = Math.floor(siguiente_superheroe_ms / 60000);
+      crear_superheroe(minuto_actual);
       siguiente_superheroe_ms += tiempo_entre_superheroes;
     }
   }
@@ -364,29 +291,41 @@
     reiniciar_superheroes();
   }
 
-  function reproducir_sonido_superheroe() {
-    const sonido = sonido_superheroe.cloneNode();
-    sonido.volume = sonido_superheroe.volume;
-    sonido.play().catch(() => {});
-  }
+  function crear_superheroe(minuto) {
+    // 1. ELIMINAR CUALQUIER SUPERHÉROE ANTERIOR PARA QUE NO SE ACUMULEN
+    zona_superheroes.innerHTML = "";
+    superheroes = [];
 
-  function crear_superheroe() {
-    const superheroe = document.createElement("div");
-    superheroe.classList.add("superheroe-suelto");
-    superheroe.textContent = "🦸🏼‍♀️";
+    // 2. CREAR EL NUEVO SUPERHÉROE
+    const superheroe_elem = document.createElement("img");
+    superheroe_elem.classList.add("superheroe-suelto");
+    superheroe_elem.draggable = false;
 
-    zona_superheroes.appendChild(superheroe);
-    reproducir_sonido_superheroe();  
+    // Arreglo con tus imágenes
+    const imagenes_superheroes = [
+      "images/batman.png",
+      "images/spiderman.png",
+      "images/hulk.png",
+      "images/capitan.png",
+      "images/superman.png"
+    ];
 
-    const size = superheroe.offsetWidth || 42;
+    // Calcula cuál imagen toca dependiendo del minuto actual
+    const indice = minuto % imagenes_superheroes.length;
+    superheroe_elem.src = imagenes_superheroes[indice];
+
+    zona_superheroes.appendChild(superheroe_elem);
+
+    const size = 150; 
     const ancho = zona_superheroes.clientWidth;
     const alto = zona_superheroes.clientHeight;
 
+    // Aparece en una posición aleatoria
     const x = Math.random() * (ancho - size);
     const y = Math.random() * (alto - size);
 
     const datos = {
-      elemento: superheroe,
+      elemento: superheroe_elem,
       x,
       y,
       dx: (Math.random() - 0.5) * velocidad_superheroe * 2,
@@ -401,19 +340,19 @@
   }
 
   function activar_arrastre_superheroe(datos) {
-    const superheroe = datos.elemento;
+    const superheroe_elem = datos.elemento;
     let offsetX = 0;
     let offsetY = 0;
 
-    superheroe.addEventListener("pointerdown", (e) => {
+    superheroe_elem.addEventListener("pointerdown", (e) => {
       datos.arrastrando = true;
-      const rect = superheroe.getBoundingClientRect();
+      const rect = superheroe_elem.getBoundingClientRect();
       offsetX = e.clientX - rect.left;
       offsetY = e.clientY - rect.top;
-      superheroe.setPointerCapture(e.pointerId);
+      superheroe_elem.setPointerCapture(e.pointerId);
     });
 
-    superheroe.addEventListener("pointermove", (e) => {
+    superheroe_elem.addEventListener("pointermove", (e) => {
       if (!datos.arrastrando) return;
 
       const rect_zona = zona_superheroes.getBoundingClientRect();
@@ -424,19 +363,19 @@
       actualizar_posicion_superheroe(datos);
     });
 
-    superheroe.addEventListener("pointerup", () => {
+    superheroe_elem.addEventListener("pointerup", () => {
       datos.arrastrando = false;
       datos.dx = (Math.random() - 0.5) * velocidad_superheroe * 2;
       datos.dy = (Math.random() - 0.5) * velocidad_superheroe * 2;
     });
 
-    superheroe.addEventListener("pointercancel", () => {
+    superheroe_elem.addEventListener("pointercancel", () => {
       datos.arrastrando = false;
     });
   }
 
   function limitar_superheroe_a_zona(datos) {
-    const size = datos.elemento.offsetWidth || 42;
+    const size = datos.elemento.offsetWidth || 150;
     const ancho = zona_superheroes.clientWidth;
     const alto = zona_superheroes.clientHeight;
 
@@ -458,7 +397,7 @@
       datos.x += datos.dx;
       datos.y += datos.dy;
 
-      const size = datos.elemento.offsetWidth || 42;
+      const size = datos.elemento.offsetWidth || 150;
       const ancho = zona_superheroes.clientWidth;
       const alto = zona_superheroes.clientHeight;
 
@@ -490,19 +429,17 @@
 
   function detener_superheroes() {
     superheroes_activos = false;
-    cancelAnimationFrame(animacion_superheroes);
-    animacion_superheroes = null;
+    if (animacion_superheroes !== null) {
+      cancelAnimationFrame(animacion_superheroes);
+      animacion_superheroes = null;
+    }
   }
 
   function reiniciar_superheroes() {
     detener_superheroes();
-
-    superheroes.forEach(datos => {
-      datos.elemento.remove();
-    });
-
+    zona_superheroes.innerHTML = "";
     superheroes = [];
-    siguiente_superheroe_ms = tiempo_entre_superheroes;
+    siguiente_superheroe_ms = 0; // Se reinicia para que el primero vuelva a salir en el ms 0
   }
 
   boton_play.addEventListener("click", iniciar_cronometro);
