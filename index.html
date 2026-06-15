@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Cronómetro Panda</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(#dff4ff, #fff2b3);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .fondo-granja {
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      height: 70vh;
+
+      background-image: url("images/granja.png");
+      background-repeat: no-repeat;
+      background-position: bottom center;
+      background-size: 100% auto;
+
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .decoracion-cielo {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 55vh;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .decoracion-cielo img {
+      position: absolute;
+      object-fit: contain;
+      user-select: none;
+      pointer-events: none;
+    }
+
+    .sol-img {
+      width: clamp(90px, 10vw, 150px);
+      top: 4vh;
+      right: 25vw;
+      animation: brillo-sol 3s ease-in-out infinite alternate;
+    }
+
+    .nube-img {
+      opacity: 0.95;
+      filter: drop-shadow(0 6px 8px rgba(0, 0, 0, 0.08));
+    }
+
+    .nube-1 {
+      width: clamp(130px, 16vw, 240px);
+      top: 15vh;
+      left: 15vw;
+      animation: flotar-nube-1 5s ease-in-out infinite alternate;
+    }
+
+    .nube-2 {
+      width: clamp(110px, 13vw, 210px);
+      top: 24vh;
+      right: 15vw;
+      opacity: 0.85;
+      animation: flotar-nube-2 6s ease-in-out infinite alternate;
+    }
+
+    .nube-3 {
+      width: clamp(170px, 10vw, 300px);
+      top: 3vh;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1;
+      animation: flotar-nube-pollito 4.5s ease-in-out infinite alternate;
+    }
+
+    @keyframes flotar-nube-1 {
+      from {
+        transform: translateY(0);
+      }
+      to {
+        transform: translateY(10px);
+      }
+    }
+
+    @keyframes flotar-nube-2 {
+      from {
+        transform: translateY(0) translateX(0);
+      }
+      to {
+        transform: translateY(-8px) translateX(-10px);
+      }
+    }
+
+    @keyframes flotar-nube-pollito {
+      from {
+        transform: translateX(-50%) translateY(0) rotate(-1deg);
+      }
+      to {
+        transform: translateX(-50%) translateY(12px) rotate(1deg);
+      }
+    }
+
+    @keyframes brillo-sol {
+      from {
+        transform: scale(1);
+        filter: drop-shadow(0 0 4px rgba(255, 196, 0, 0.4));
+      }
+      to {
+        transform: scale(1.05);
+        filter: drop-shadow(0 0 14px rgba(255, 196, 0, 0.65));
+      }
+    }
+
+    #pasto-pollitos {
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      height: 20vh;
+      z-index: 1;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    .pollito-suelto {
+      position: absolute;
+      font-size: 75px;
+      cursor: grab;
+      user-select: none;
+      touch-action: none;
+      pointer-events: auto;
+      transition: transform 0.15s;
+    }
+    .pollito-suelto:active {
+      cursor: grabbing;
+      transform: scale(1.15);
+    }
+
+    .nombre-autor {
+      position: absolute;
+      top: -28px;
+      left: 50%;
+      transform: translateX(-50%);
+
+      background-color: #fff1a8;
+      color: #9a6500;
+      border: 3px solid #f4b400;
+      border-radius: 18px;
+
+      padding: 8px 22px;
+      font-size: 17px;
+      font-weight: bold;
+      letter-spacing: 0.4px;
+
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.18);
+      white-space: nowrap;
+    }
+
+    .contenedor {
+      position: relative;
+      z-index: 2;
+      background-color: rgba(255, 248, 220, 0.95);
+      border: 5px solid #f4b400;
+      border-radius: 30px;
+      padding: 45px 50px;
+      text-align: center;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      width: 520px;     
+      min-height: 320px; 
+      backdrop-filter: blur(2px);
+    }
+
+    h1 {
+      color: #d18b00;
+      margin-bottom: 10px;
+      font-size: 50px;
+    }
+    .pollito {
+      font-size: 100px;
+      margin: 10px 0;
+      animation: saltito 1s infinite alternate;
+    }
+
+    @keyframes saltito {
+      from {
+        transform: translateY(0);
+      }
+      to {
+        transform: translateY(-10px);
+      }
+    }
+
+    #tiempo {
+      font-size: 48px;
+      font-weight: bold;
+      color: #7a4b00;
+      margin: 25px 0;
+      background-color: #fff1a8;
+      padding: 15px;
+      border-radius: 20px;
+      border: 3px dashed #f4b400;
+    }
+    .botones button {
+      font-size: 18px;
+      padding: 12px 18px;
+      margin: 8px;
+      border: none;
+      border-radius: 15px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    #play {
+      background-color: #8fd14f;
+      color: white;
+    }
+
+    #detener {
+      background-color: #ff5757;
+      color: white;
+    }
+
+    #reiniciar {
+      background-color: #ff914d;
+      color: white;
+    }
+
+    button:hover {
+      transform: scale(1.08);
+      opacity: 0.9;
+    }
+    .mensaje {
+      color: #9a6500;
+      font-size: 16px;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="decoracion-cielo">
+    <img src="images/sol.png" class="sol-img" alt="Sol">
+
+    <img src="images/nube1.png" class="nube-img nube-1" alt="Nube">
+    <img src="images/nube2.png" class="nube-img nube-2" alt="Nube">
+    <img src="images/nube3.png" class="nube-img nube-3" alt="Nube pollito">
+  </div>
+
+  <div class="fondo-granja"></div>
+
+  <div id="pasto-pollitos"></div>
+
+  <div class="contenedor">
+
+    <div class="nombre-autor">🐼 Katia Sánchez Hernández 🐼</div>
+
+    <h1>Cronómetro Panda</h1>
+
+    <div class="pollito">🐼</div>
+
+    <div id="tiempo">00:00.00</div>
+
+    <div class="botones">
+      <button id="play">▶️ Play</button>
+      <button id="detener">⏸️ Detener</button>
+      <button id="reiniciar">🔄 Reiniciar</button>
+    </div>
+
+  </div>
+
+<script>
+  let tiempo_acumulado = 0;  
+  let tiempo_inicio = null;  
+  let intervalo = null;
+
+  const limite = 15 * 60 * 1000;
+
+  const tiempo = document.getElementById("tiempo");
+  const boton_play = document.getElementById("play");
+  const boton_detener = document.getElementById("detener");
+  const boton_reiniciar = document.getElementById("reiniciar");
+
+
+  const pasto_pollitos = document.getElementById("pasto-pollitos");
+
+  const tiempo_entre_pollitos = 1 * 60 * 1000;
+  const velocidad_pollito = 1.5;
+
+  const sonido_pollito = new Audio("audio/sonido_pollito.mp3");
+  sonido_pollito.volume = 1;
+  sonido_pollito.preload = "auto";
+
+  let pollitos = [];
+  let intervalo_pollitos = null;
+  let animacion_pollitos = null;
+  let pollitos_activos = false;
+  let siguiente_pollito_ms = tiempo_entre_pollitos;
+
+
+  function mostrar_tiempo(ms) {
+    let minutos = Math.floor(ms / 60000);
+    let segundos = Math.floor((ms % 60000) / 1000);
+    let milesimas = Math.floor((ms % 1000) /10);
+
+    let minutos_texto = String(minutos).padStart(2, "0");
+    let segundos_texto = String(segundos).padStart(2, "0");
+    let milesimas_texto = String(milesimas).padStart(2, "0");
+
+    tiempo.textContent = minutos_texto + ":" + segundos_texto + "." + milesimas_texto;
+  }
+
+  function generar_pollitos_por_tiempo(transcurrido) {
+  while (
+    siguiente_pollito_ms <= limite &&
+    transcurrido >= siguiente_pollito_ms
+  ) {
+    crear_pollito();
+    siguiente_pollito_ms += tiempo_entre_pollitos;
+  }
+}
+
+  function actualizar_cronometro() {
+    let ahora = performance.now();
+    let transcurrido = tiempo_acumulado + (ahora - tiempo_inicio);
+
+    if (transcurrido >= limite) {
+      transcurrido = limite;
+
+      generar_pollitos_por_tiempo(transcurrido);
+      mostrar_tiempo(transcurrido);
+
+      clearInterval(intervalo);
+      intervalo = null;
+      tiempo_acumulado = limite;
+
+      detener_pollitos();
+
+      return;
+    }
+
+    generar_pollitos_por_tiempo(transcurrido);
+    mostrar_tiempo(transcurrido);
+  }
+
+  function iniciar_cronometro() {
+    if (intervalo === null && tiempo_acumulado < limite) {
+      tiempo_inicio = performance.now();
+
+      intervalo = setInterval(actualizar_cronometro, 10);
+
+      iniciar_pollitos();
+    }
+  }
+
+  function detener_cronometro() {
+    if (intervalo !== null) {
+      tiempo_acumulado += performance.now() - tiempo_inicio;
+
+      clearInterval(intervalo);
+      intervalo = null;
+
+      detener_pollitos();
+    }
+  }
+
+  function reiniciar_cronometro() {
+    clearInterval(intervalo);
+    intervalo = null;
+    tiempo_acumulado = 0;
+    tiempo_inicio = null;
+
+    mostrar_tiempo(0);
+
+    reiniciar_pollitos();
+  }
+
+
+
+  function reproducir_sonido_pollito() {
+    const sonido = sonido_pollito.cloneNode();
+    sonido.volume = sonido_pollito.volume;
+
+    sonido.play().catch(() => {
+    });
+  }
+
+
+
+  function crear_pollito() {
+    const pollito = document.createElement("div");
+    pollito.classList.add("pollito-suelto");
+    pollito.textContent = "🐼";
+
+    pasto_pollitos.appendChild(pollito);
+    reproducir_sonido_pollito();  
+
+    const size = pollito.offsetWidth || 42;
+    const ancho = pasto_pollitos.clientWidth;
+    const alto = pasto_pollitos.clientHeight;
+
+    const x = Math.random() * (ancho - size);
+    const y = Math.random() * (alto - size);
+
+    const datos = {
+      elemento: pollito,
+      x,
+      y,
+      dx: (Math.random() - 0.5) * velocidad_pollito * 2,
+      dy: (Math.random() - 0.5) * velocidad_pollito * 2,
+      arrastrando: false
+    };
+
+    actualizar_posicion_pollito(datos);
+    activar_arrastre_pollito(datos);
+
+    pollitos.push(datos);
+  }
+
+  function activar_arrastre_pollito(datos) {
+    const pollito = datos.elemento;
+
+    let offsetX = 0;
+    let offsetY = 0;
+
+    pollito.addEventListener("pointerdown", (e) => {
+      datos.arrastrando = true;
+
+      const rect = pollito.getBoundingClientRect();
+
+      offsetX = e.clientX - rect.left;
+      offsetY = e.clientY - rect.top;
+
+      pollito.setPointerCapture(e.pointerId);
+    });
+
+    pollito.addEventListener("pointermove", (e) => {
+      if (!datos.arrastrando) return;
+
+      const rect_pasto = pasto_pollitos.getBoundingClientRect();
+
+      datos.x = e.clientX - rect_pasto.left - offsetX;
+      datos.y = e.clientY - rect_pasto.top - offsetY;
+
+      limitar_pollito_al_pasto(datos);
+      actualizar_posicion_pollito(datos);
+    });
+
+    pollito.addEventListener("pointerup", () => {
+      datos.arrastrando = false;
+
+      datos.dx = (Math.random() - 0.5) * velocidad_pollito * 2;
+      datos.dy = (Math.random() - 0.5) * velocidad_pollito * 2;
+    });
+
+    pollito.addEventListener("pointercancel", () => {
+      datos.arrastrando = false;
+    });
+  }
+
+  function limitar_pollito_al_pasto(datos) {
+    const size = datos.elemento.offsetWidth || 42;
+    const ancho = pasto_pollitos.clientWidth;
+    const alto = pasto_pollitos.clientHeight;
+
+    datos.x = Math.max(0, Math.min(ancho - size, datos.x));
+    datos.y = Math.max(0, Math.min(alto - size, datos.y));
+  }
+
+  function actualizar_posicion_pollito(datos) {
+    datos.elemento.style.left = datos.x + "px";
+    datos.elemento.style.top = datos.y + "px";
+  }
+
+  function mover_pollitos() {
+    if (!pollitos_activos) return;
+
+    pollitos.forEach(datos => {
+      if (datos.arrastrando) return;
+
+      datos.x += datos.dx;
+      datos.y += datos.dy;
+
+      const size = datos.elemento.offsetWidth || 42;
+      const ancho = pasto_pollitos.clientWidth;
+      const alto = pasto_pollitos.clientHeight;
+
+      if (datos.x <= 0 || datos.x >= ancho - size) {
+        datos.dx *= -1;
+      }
+
+      if (datos.y <= 0 || datos.y >= alto - size) {
+        datos.dy *= -1;
+      }
+
+      if (Math.random() < 0.02) {
+        datos.dx = (Math.random() - 0.5) * velocidad_pollito * 2;
+        datos.dy = (Math.random() - 0.5) * velocidad_pollito * 2;
+      }
+
+      limitar_pollito_al_pasto(datos);
+      actualizar_posicion_pollito(datos);
+    });
+
+    animacion_pollitos = requestAnimationFrame(mover_pollitos);
+  }
+
+  function iniciar_pollitos() {
+    if (pollitos_activos) return;
+
+    pollitos_activos = true;
+    mover_pollitos();
+  }
+
+  function detener_pollitos() {
+    pollitos_activos = false;
+
+    cancelAnimationFrame(animacion_pollitos);
+    animacion_pollitos = null;
+  }
+
+  function reiniciar_pollitos() {
+    detener_pollitos();
+
+    pollitos.forEach(datos => {
+      datos.elemento.remove();
+    });
+
+    pollitos = [];
+    siguiente_pollito_ms = tiempo_entre_pollitos;
+  }
+
+
+
+  boton_play.addEventListener("click", iniciar_cronometro);
+  boton_detener.addEventListener("click", detener_cronometro);
+  boton_reiniciar.addEventListener("click", reiniciar_cronometro);
+
+  mostrar_tiempo(0);
+</script>
+
+</body>
+</html>
